@@ -18,9 +18,11 @@ const SidebarProjectList: React.FC<SidebarProjectListProps> = ({ projectList, se
   }, [projectList])
   return (
     <div className='flex flex-col gap-2'>
-      {projectList?.map((e: IProject, i: number) => (
-        <SidebarLink key={i} link={{ label: e?.name, href: `/${e?.id}` }} />
-      ))}
+      {projectList?.length === 0
+        ? <SidebarLink link={{ label: "No hay proyectos", href: "#" }} className='cursor-default text-neutral-600' />
+        : projectList?.map((e: IProject, i: number) => (
+          <SidebarLink key={i} link={{ label: e?.name, href: `/${e?.id}` }} />
+        ))}
     </div>
   )
 }
