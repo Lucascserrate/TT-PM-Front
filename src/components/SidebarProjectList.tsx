@@ -1,7 +1,6 @@
 import { useEffect } from 'react'
 import axios from 'axios';
 import { IProject } from '@/interface/interface';
-import { div } from 'framer-motion/client';
 import { SidebarLink } from './ui/sidebar';
 
 
