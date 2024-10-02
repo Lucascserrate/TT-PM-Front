@@ -15,7 +15,7 @@ const SidebarProjectList: React.FC<SidebarProjectListProps> = ({ projectList, se
     axios.get("http://localhost:3001/projects").then((res) => {
       setProjectList(res.data);
     })
-  }, [])
+  }, [projectList])
   return (
     <div className='flex flex-col gap-2'>
       {projectList?.map((e: IProject, i: number) => (
