@@ -1,6 +1,4 @@
-import { SidebarView } from '@/components/Sidebar';
 import { TypewriterEffectSmooth } from '@/components/ui/typewriter-effect';
-import Image from "next/image";
 
 export default function Home() {
   const words = [

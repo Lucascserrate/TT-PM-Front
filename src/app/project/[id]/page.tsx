@@ -1,9 +1,9 @@
 'use client'
+import TaskSection from '@/components/TaskSection'
 import { Textarea } from '@/components/ui/textarea'
 import { IProject } from '@/interface/interface'
 import { IconEdit } from '@tabler/icons-react'
 import axios from 'axios'
-import { set } from 'date-fns'
 import { useParams } from 'next/navigation'
 import React, { useEffect, useState } from 'react'
 
@@ -49,7 +49,7 @@ const ProjectDetailPage = () => {
                 <Textarea value={description} onChange={(e) => setDescription(e.target.value)} onBlur={handleDescriptionSave} disabled={textareaDisabled} className={`${textareaDisabled && 'border-none shadow-none'} resize-none`} />
                 <IconEdit className='cursor-pointer' onClick={() => setTextareaDisabled(!textareaDisabled)} />
             </div>
-
+            <TaskSection />
         </div>
     )
 }

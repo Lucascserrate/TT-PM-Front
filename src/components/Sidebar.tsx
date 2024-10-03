@@ -1,16 +1,13 @@
 "use client";
-import React, { useState } from "react";
+import { useState } from "react";
 import {
-    IconArrowLeft,
     IconBrandTabler,
-    IconPlus,
-    IconSettings,
-    IconUser,
 } from "@tabler/icons-react";
-import { Sidebar, SidebarBody, SidebarLink } from './ui/sidebar';
+import { Sidebar, SidebarBody } from './ui/sidebar';
 import { Logo, LogoIcon } from './Logo';
 import SidebarProjectList from './SidebarProjectList';
 import AddProject from './AddProject';
+import SidebarLoginSection from './SidebarLoginSection';
 
 export function SidebarView() {
     const [projectList, setProjectList]: any = useState([]);
@@ -31,17 +28,7 @@ export function SidebarView() {
                             <SidebarProjectList projectList={projectList} setProjectList={setProjectList} />
                         </div>
                     </div>
-                    <div>
-                        <SidebarLink
-                            link={{
-                                label: "Manu Arora",
-                                href: "#",
-                                icon: (
-                                    <IconUser className="text-neutral-700 dark:text-neutral-200 h-5 w-5 flex-shrink-0" />
-                                ),
-                            }}
-                        />
-                    </div>
+                    <SidebarLoginSection />
                 </SidebarBody>
             </Sidebar>
         </>

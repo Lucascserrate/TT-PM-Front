@@ -21,7 +21,7 @@ const SidebarProjectList: React.FC<SidebarProjectListProps> = ({ projectList, se
       {projectList?.length === 0
         ? <SidebarLink link={{ label: "No hay proyectos", href: "#" }} className='cursor-default text-neutral-600' />
         : projectList?.map((e: IProject, i: number) => (
-          <SidebarLink key={i} link={{ label: e?.name, href: `/${e?.id}` }} />
+          <SidebarLink key={i} link={{ label: e?.name, href: `/project/${e?.id}` }} />
         ))}
     </div>
   )
