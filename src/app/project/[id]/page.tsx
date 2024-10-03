@@ -2,11 +2,12 @@
 import { useEffect, useState } from 'react'
 import TaskSection from '@/components/TaskSection'
 import { Textarea } from '@/components/ui/textarea'
-import { useGetProjectByIdQuery, useUpdateProjectMutation } from '@/services/project'
-import { IconEdit } from '@tabler/icons-react'
-import { useParams } from 'next/navigation'
+import { useDeleteProjectMutation, useGetProjectByIdQuery, useUpdateProjectMutation } from '@/services/project'
+import { IconEdit, IconTrash, IconTrashX } from '@tabler/icons-react'
+import { useParams, useRouter } from 'next/navigation'
 
 const ProjectDetailPage = () => {
+    const router = useRouter()
     const { id } = useParams();
     const projectId = String(id)
 
@@ -15,6 +16,7 @@ const ProjectDetailPage = () => {
 
     const { data: project } = useGetProjectByIdQuery(projectId);
     const [updateProject] = useUpdateProjectMutation();
+    const [deleteProject] = useDeleteProjectMutation();
 
     useEffect(() => {
         if (project) {
@@ -36,10 +38,26 @@ const ProjectDetailPage = () => {
         }
     };
 
+    const handleDeleteProject = async () => {
+        if (project) {
+            try {
+                // Llamamos a la mutación para eliminar el proyecto
+                await deleteProject(projectId).unwrap();
+                router.push('/');
+            } catch (error) {
+                console.error('Error al eliminar el proyecto:', error);
+            }
+        }
+    }
+
     return (
         <div className='max-w-[800px] w-full mx-auto flex flex-col gap-4 py-10'>
-            <h1 className='text-4xl font-semibold'>{project?.name}</h1>
-            <div className='flex gap-2'>
+            <div className='flex justify-between items-center'>
+                <h1 className='text-4xl font-semibold'>{project?.name}</h1>
+                <IconTrash className='text-gray-600 cursor-pointer' onClick={handleDeleteProject} />
+            </div>
+            <hr />
+            <div className='flex gap-2 py-3'>
                 <Textarea value={description} onChange={(e) => setDescription(e.target.value)} placeholder='Descripción' onBlur={handleDescriptionSave} disabled={textareaDisabled} className={`${textareaDisabled && 'border-none shadow-none'} resize-none`} />
                 <IconEdit className='cursor-pointer' onClick={() => setTextareaDisabled(!textareaDisabled)} />
             </div>

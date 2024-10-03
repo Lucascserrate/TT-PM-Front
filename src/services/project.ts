@@ -9,7 +9,8 @@ export const project = createApi({
    tagTypes: ['Project'],
    endpoints: (build) => ({
       getProject: build.query<IProject[], null>({
-         query: () => 'project'
+         query: () => 'project',
+         providesTags: ['Project'],
       }),
       getProjectById: build.query<IProject, string>({
          query: (id) => `project/${id}`
@@ -26,11 +27,17 @@ export const project = createApi({
          query: ({ id, description }) => ({
             url: `project/${id}`,
             method: 'PATCH',
-            body: { description }, // Solo actualizamos la descripción
+            body: { description },
          }),
       }),
+      deleteProject: build.mutation<void, string>({
+         query: (id) => ({
+            url: `project/${id}`,
+            method: 'DELETE',
+         }),
+         invalidatesTags: ['Project'],
+      })
    }),
 })
 
-export const { useGetProjectQuery, useGetProjectByIdQuery, useCreateProjectMutation, useUpdateProjectMutation } = project
-
+export const { useGetProjectQuery, useGetProjectByIdQuery, useCreateProjectMutation, useUpdateProjectMutation, useDeleteProjectMutation } = project
