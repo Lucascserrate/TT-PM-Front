@@ -10,7 +10,6 @@ import AddProject from './AddProject';
 import SidebarLoginSection from './SidebarLoginSection';
 
 export function SidebarView() {
-    const [projectList, setProjectList]: any = useState([]);
     const [open, setOpen] = useState(false);
 
     return (
@@ -25,7 +24,7 @@ export function SidebarView() {
                                 <IconBrandTabler className="text-neutral-700 dark:text-neutral-200 h-5 w-5 flex-shrink-0" />
                                 <div className="text-neutral-700 dark:text-neutral-200 text-sm font-medium">Proyectos</div>
                             </div>
-                            <SidebarProjectList projectList={projectList} setProjectList={setProjectList} />
+                            <SidebarProjectList />
                         </div>
                     </div>
                     <SidebarLoginSection />

@@ -1,52 +1,46 @@
 'use client'
+import { useEffect, useState } from 'react'
 import TaskSection from '@/components/TaskSection'
 import { Textarea } from '@/components/ui/textarea'
-import { IProject } from '@/interface/interface'
+import { useGetProjectByIdQuery, useUpdateProjectMutation } from '@/services/project'
 import { IconEdit } from '@tabler/icons-react'
-import axios from 'axios'
 import { useParams } from 'next/navigation'
-import React, { useEffect, useState } from 'react'
 
 const ProjectDetailPage = () => {
-    const { id } = useParams()
-    const [project, setProject] = useState<IProject>()
+    const { id } = useParams();
+    const projectId = String(id)
+
     const [textareaDisabled, setTextareaDisabled] = useState<boolean>(true)
     const [description, setDescription] = useState<string>('')
 
-    // Setea los datos del proyecto
+    const { data: project } = useGetProjectByIdQuery(projectId);
+    const [updateProject] = useUpdateProjectMutation();
+
     useEffect(() => {
-        axios.get(`http://localhost:3001/projects/${id}`).then((res) => {
-            setProject(res.data)
-            setDescription(res.data.description)
-        })
-    }, [id])
+        if (project) {
+            setDescription(project.description); // Inicializa la descripción
+        }
+    }, [project]);
 
     const handleDescriptionSave = async () => {
-        try {
-            await axios.patch(`http://localhost:3001/projects/${id}`, {
-                description: description,
-            })
+        if (!textareaDisabled && project) {
+            try {
+                // Llamamos a la mutación para actualizar el proyecto
+                await updateProject({ id: projectId, description }).unwrap();
 
-            setProject((prevProject: IProject | undefined) => {
-                if (prevProject) {
-                    return {
-                        ...prevProject,
-                        description: description
-                    }
-                }
-                return prevProject
-            })
-            setTextareaDisabled(true)
-        } catch (error) {
-            console.error("Error al actualizar la descripción:", error)
+                console.log('Descripción actualizada');
+                setTextareaDisabled(true); // Deshabilitamos el textarea nuevamente
+            } catch (error) {
+                console.error('Error al actualizar la descripción:', error);
+            }
         }
-    }
+    };
 
     return (
         <div className='max-w-[800px] w-full mx-auto flex flex-col gap-4 py-10'>
             <h1 className='text-4xl font-semibold'>{project?.name}</h1>
             <div className='flex gap-2'>
-                <Textarea value={description} onChange={(e) => setDescription(e.target.value)} onBlur={handleDescriptionSave} disabled={textareaDisabled} className={`${textareaDisabled && 'border-none shadow-none'} resize-none`} />
+                <Textarea value={description} onChange={(e) => setDescription(e.target.value)} placeholder='Descripción' onBlur={handleDescriptionSave} disabled={textareaDisabled} className={`${textareaDisabled && 'border-none shadow-none'} resize-none`} />
                 <IconEdit className='cursor-pointer' onClick={() => setTextareaDisabled(!textareaDisabled)} />
             </div>
             <TaskSection />

@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import { useState } from 'react'
 import {
     Dialog,
     DialogContent,
@@ -11,7 +11,7 @@ import { Input } from './ui/input';
 import { Textarea } from './ui/textarea';
 import DatePickerWithRange from './DatePickerWithRange';
 import { addDays, format } from 'date-fns';
-import axios from 'axios';
+import { useCreateProjectMutation } from '@/services/project';
 
 
 const AddProject = () => {
@@ -23,14 +23,17 @@ const AddProject = () => {
         to: format(addDays(new Date(2024, 9, 3), 20), "yyyy-MM-dd"),
     })
 
-    const handleSubmit = (e: any) => {
+    const [createProject] = useCreateProjectMutation()
+
+    const handleSubmit = async (e: any) => {
         e.preventDefault()
-        axios.post("http://localhost:3001/projects", {
+        const newProject = {
             name,
             description,
-            finalDate: date.to,
-            initialDate: date.from
-        })
+            initialDate: date.from,
+            finalDate: date.to
+        }
+        await createProject(newProject).unwrap();
         setOpen(false)
     }
 

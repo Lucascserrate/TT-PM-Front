@@ -1,12 +1,12 @@
 import { IconArrowRight, IconUser } from '@tabler/icons-react'
 import { SidebarLink } from './ui/sidebar'
-import { useState } from 'react'
+import { useAppSelector } from '@/redux/hooks'
 
 const SidebarLoginSection = () => {
-    const [loggedIn, setLoggedIn] = useState(false)
+    const logged = useAppSelector((state) => state.global.logged)
     return (
         <div>
-            {loggedIn ?
+            {logged ?
                 <SidebarLink
                     link={{
                         label: "Lucas Camacho",
