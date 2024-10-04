@@ -1,15 +1,15 @@
 import React, { useState } from 'react'
 import { Input } from './ui/input'
-import { IconAlignLeft, IconCheck, IconLine, IconLineDashed, IconTrash, IconX } from '@tabler/icons-react'
+import { IconCheck, IconLineDashed, IconTrash, IconX } from '@tabler/icons-react'
 import { useCreateTaskMutation, useDeleteTaskMutation, useGetTaskByIdQuery } from '@/services/task'
 import { useParams } from 'next/navigation'
-import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from './ui/select'
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from './ui/select'
+import { TaskStatus } from '@/interface/enum'
 
 const TaskSection = () => {
     const { id } = useParams()
     const { data } = useGetTaskByIdQuery(String(id))
     const [createTaskInput, setCreateTaskInput] = useState('')
-    const [status, setStatus] = useState()
     const [createTask] = useCreateTaskMutation()
     const [deleteTask] = useDeleteTaskMutation()
 
@@ -46,12 +46,12 @@ const TaskSection = () => {
                         <div className='flex items-center gap-3'>
                             <Select>
                                 <SelectTrigger className="text-xs">
-                                    <SelectValue defaultValue={task?.status} />
+                                    <SelectValue defaultValue={TaskStatus.PENDING} />
                                 </SelectTrigger>
                                 <SelectContent>
-                                    <SelectItem value="pending" >Pendiente</SelectItem>
-                                    <SelectItem value="in-progress">En progreso</SelectItem>
-                                    <SelectItem value="completed">Finalizado</SelectItem>
+                                    <SelectItem value={TaskStatus.PENDING}>Pendiente</SelectItem>
+                                    <SelectItem value={TaskStatus.IN_PROGRESS}>En progreso</SelectItem>
+                                    <SelectItem value={TaskStatus.COMPLETED}>Finalizado</SelectItem>
                                 </SelectContent>
                             </Select>
                             <IconTrash className='w-4 h-4 cursor-pointer' onClick={() => handleDeleteTask(task?.id)} />
