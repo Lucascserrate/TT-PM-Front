@@ -8,8 +8,9 @@ export const task = createApi({
    }),
    tagTypes: ['Task'],
    endpoints: (build) => ({
-      getTaskById: build.query<ITask, string>({
-         query: (id) => `task/?project_id=${id}`
+      getTaskById: build.query<ITask[], string>({
+         query: (id) => `task/?project_id=${id}`,
+         providesTags: ['Task'],
       }),
       createTask: build.mutation<void, Partial<ITask>>({
          query: (newTask) => ({
