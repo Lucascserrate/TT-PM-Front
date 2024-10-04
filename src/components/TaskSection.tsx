@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import { Input } from './ui/input'
-import { IconAlignLeft, IconCheck, IconLine, IconLineDashed, IconX } from '@tabler/icons-react'
-import { useCreateTaskMutation, useGetTaskByIdQuery } from '@/services/task'
+import { IconAlignLeft, IconCheck, IconLine, IconLineDashed, IconTrash, IconX } from '@tabler/icons-react'
+import { useCreateTaskMutation, useDeleteTaskMutation, useGetTaskByIdQuery } from '@/services/task'
 import { useParams } from 'next/navigation'
 import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from './ui/select'
 
@@ -9,14 +9,19 @@ const TaskSection = () => {
     const { id } = useParams()
     const { data } = useGetTaskByIdQuery(String(id))
     const [createTaskInput, setCreateTaskInput] = useState('')
-    // const [status, setStatus] = useState(data?.status)
+    const [status, setStatus] = useState()
     const [createTask] = useCreateTaskMutation()
+    const [deleteTask] = useDeleteTaskMutation()
 
     const handleCreateTask = () => {
         if (createTaskInput) {
             createTask({ name: createTaskInput, projectId: Number(id) }).unwrap()
             setCreateTaskInput('')
         }
+    }
+
+    const handleDeleteTask = (id: number) => {
+        deleteTask(String(id)).unwrap()
     }
     return (
         <div className='flex flex-col gap-2'>
@@ -33,15 +38,26 @@ const TaskSection = () => {
             </div>
             {
                 data?.map((task, i) => (
-                    <div key={i} className='flex justify-between items-center'>
+                    <div key={i} className='flex justify-between items-center hover:bg-gray-100 px-2 py-1 cursor-pointer'>
                         <div className='flex items-center gap-2'>
                             <IconLineDashed className='w-5 h-5' />
-                            <div>{task?.name}</div>
+                            <div className='text-sm'>{task?.name}</div>
                         </div>
-
+                        <div className='flex items-center gap-3'>
+                            <Select>
+                                <SelectTrigger className="text-xs">
+                                    <SelectValue defaultValue={task?.status} />
+                                </SelectTrigger>
+                                <SelectContent>
+                                    <SelectItem value="pending" >Pendiente</SelectItem>
+                                    <SelectItem value="in-progress">En progreso</SelectItem>
+                                    <SelectItem value="completed">Finalizado</SelectItem>
+                                </SelectContent>
+                            </Select>
+                            <IconTrash className='w-4 h-4 cursor-pointer' onClick={() => handleDeleteTask(task?.id)} />
+                        </div>
                     </div>
-                )
-                )
+                ))
             }
         </div>
     )
