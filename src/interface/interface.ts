@@ -13,7 +13,7 @@ export interface ITask {
     name: string;
     description: string;
     status: TaskStatus;
-    project: IProject;
+    projectId: number;
     user: IUser;
 }
 
