@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react'
 import TaskSection from '@/components/TaskSection'
 import { Textarea } from '@/components/ui/textarea'
 import { useDeleteProjectMutation, useGetProjectByIdQuery, useUpdateProjectMutation } from '@/services/project'
-import { IconEdit, IconTrash, IconTrashX } from '@tabler/icons-react'
+import { IconArrowBackUp, IconEdit, IconTrash } from '@tabler/icons-react'
 import { useParams, useRouter } from 'next/navigation'
 
 const ProjectDetailPage = () => {
@@ -53,13 +53,16 @@ const ProjectDetailPage = () => {
     return (
         <div className='max-w-[800px] w-full mx-auto flex flex-col gap-4 py-10'>
             <div className='flex justify-between items-center'>
-                <h1 className='text-4xl font-semibold'>{project?.name}</h1>
+                <div className='flex items-center gap-3'>
+                    <IconArrowBackUp className='cursor-pointer' onClick={() => router.push('/')} />
+                    <h1 className='text-4xl font-semibold'>{project?.name}</h1>
+                </div>
                 <IconTrash className='text-gray-600 cursor-pointer' onClick={handleDeleteProject} />
             </div>
             <hr />
             <div className='flex gap-2 py-3'>
                 <Textarea value={description} onChange={(e) => setDescription(e.target.value)} placeholder='Descripción' onBlur={handleDescriptionSave} disabled={textareaDisabled} className={`${textareaDisabled && 'border-none shadow-none'} resize-none`} />
-                <IconEdit className='cursor-pointer' onClick={() => setTextareaDisabled(!textareaDisabled)} />
+                <IconEdit className='cursor-pointer' onClick={() => setTextareaDisabled(false)} />
             </div>
             <TaskSection />
         </div>
