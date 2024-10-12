@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import { Input } from './ui/input'
 import { IconCheck, IconLineDashed, IconTrash, IconX } from '@tabler/icons-react'
-import { useCreateTaskMutation, useDeleteTaskMutation, useGetTaskByIdQuery } from '@/services/task'
+import { useCreateTaskMutation, useDeleteTaskMutation, useGetTaskByIdQuery, useUpdateTaskMutation } from '@/services/task'
 import { useParams } from 'next/navigation'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from './ui/select'
 import { TaskStatus } from '@/interface/enum'
@@ -11,6 +11,7 @@ const TaskSection = () => {
     const { data } = useGetTaskByIdQuery(String(id))
     const [createTaskInput, setCreateTaskInput] = useState('')
     const [createTask] = useCreateTaskMutation()
+    const [updateTask] = useUpdateTaskMutation()
     const [deleteTask] = useDeleteTaskMutation()
 
     const handleCreateTask = () => {
@@ -18,6 +19,10 @@ const TaskSection = () => {
             createTask({ name: createTaskInput, projectId: Number(id) }).unwrap()
             setCreateTaskInput('')
         }
+    }
+
+    const handleUpdateTask = (id: string, status: TaskStatus) => {
+        updateTask({ id, status }).unwrap()
     }
 
     const handleDeleteTask = (id: number) => {
@@ -44,9 +49,9 @@ const TaskSection = () => {
                             <div className='text-sm'>{task?.name}</div>
                         </div>
                         <div className='flex items-center gap-3'>
-                            <Select>
+                            <Select value={task?.status} onValueChange={(status) => handleUpdateTask(String(task?.id), status as TaskStatus)}>
                                 <SelectTrigger className="text-xs">
-                                    <SelectValue defaultValue={TaskStatus.PENDING} />
+                                    <SelectValue defaultValue={TaskStatus.PENDING}>{task?.status}</SelectValue>
                                 </SelectTrigger>
                                 <SelectContent>
                                     <SelectItem value={TaskStatus.PENDING}>Pendiente</SelectItem>

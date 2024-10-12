@@ -1,3 +1,4 @@
+import { TaskStatus } from '@/interface/enum';
 import { ITask } from '@/interface/interface';
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
 
@@ -20,12 +21,13 @@ export const task = createApi({
          }),
          invalidatesTags: ['Task'],
       }),
-      updateTask: build.mutation<void, { id: string; description: string }>({
-         query: ({ id, description }) => ({
+      updateTask: build.mutation<void, { id: string; status?: TaskStatus }>({
+         query: ({ id, status }) => ({
             url: `task/${id}`,
             method: 'PATCH',
-            body: { description },
+            body: { status },
          }),
+         invalidatesTags: ['Task'],
       }),
       deleteTask: build.mutation<void, string>({
          query: (id) => ({
