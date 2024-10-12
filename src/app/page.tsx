@@ -1,4 +1,5 @@
 import { Cover } from '@/components/ui/cover';
+import HomeProjectList from './HomeProjectList';
 
 export default function Home() {
 
@@ -8,7 +9,7 @@ export default function Home() {
         Bienvenido a <Cover>ProManage</Cover>
       </h1>
       <div>Selecciona un proyecto</div>
-
+      <HomeProjectList />
     </div>
   );
 }
